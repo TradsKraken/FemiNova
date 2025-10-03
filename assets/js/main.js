@@ -13,15 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Team data - edit this array to update team members
 const team = [
-    'Kent Dave R. Pilar|kent.pilar@feminova.org',
-    'Chesterr Ivan Mamaran|chester.mamaran@feminova.org',
-    'Reinna Nianga|reinna.nianga@feminova.org',
-    'Lurense Reloj|lurense.reloj@feminova.org',
-    'Jethro Arañez|jethro.aranez@feminova.org',
-    'Kurt Dave Resma|kurt.resma@feminova.org',
     'AR Cagna-an|ar.cagnaan@feminova.org',
+    'Chester Ivan Mamaran|chester.mamaran@feminova.org',
     'Christine Wasquin|christine.wasquin@feminova.org',
     'Eljhann Abanggan|eljhann.abanggan@feminova.org',
+    'Jethro Arañez|jethro.aranez@feminova.org',
+    'Kent Dave R. Pilar|kent.pilar@feminova.org',
+    'Kurt Dave Resma|kurt.resma@feminova.org',
+    'Lurense Reloj|lurense.reloj@feminova.org',
+    'Reinna Nianga|reinna.nianga@feminova.org',
     'Rin Marquiso|rin.marquiso@feminova.org',
     'RJ Angelo Moniset|rj.moniset@feminova.org'
 ];
@@ -145,6 +145,7 @@ function initNavbarAnimation() {
         if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
             // Scrolling down - hide navbar
             if (isVisible) {
+                nav.classList.add('navbar-hidden');
                 nav.classList.remove('navbar-visible');
                 isVisible = false;
             }
@@ -152,6 +153,7 @@ function initNavbarAnimation() {
             // Scrolling up or at top - show navbar
             if (!isVisible) {
                 nav.classList.add('navbar-visible');
+                nav.classList.remove('navbar-hidden');
                 isVisible = true;
             }
         }
