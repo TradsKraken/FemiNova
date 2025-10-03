@@ -140,28 +140,91 @@
     </section>
 
     <!-- About Us Section -->
-    <section id="about" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-4xl font-bold text-pink-600 mb-12">About FemiNova</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-pink-50 p-8 rounded-xl reveal">
-                        <h3 class="text-2xl font-semibold text-pink-600 mb-4">Our Mission</h3>
-                        <p class="text-gray-700">
-                            To amplify women's voices, advocate for gender equality, and create safe spaces where every woman can thrive and reach her full potential.
+    <section id="about" class="py-24 bg-gradient-to-br from-pink-50 via-white to-pink-25 relative overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-pink-100/30 rounded-full -translate-x-48 -translate-y-48"></div>
+        <div class="absolute bottom-0 right-0 w-80 h-80 bg-pink-200/20 rounded-full translate-x-40 translate-y-40"></div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-6xl mx-auto">
+                <!-- Section Header -->
+                <div class="text-center mb-16 reveal">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl shadow-lg mb-6">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 via-pink-700 to-pink-800 bg-clip-text text-transparent mb-6">
+                        About FemiNova
+                    </h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        Empowering women through advocacy, education, and community support. We believe in creating a world where every woman can thrive with dignity, respect, and equal opportunities.
+                    </p>
+                </div>
+
+                <!-- Core Values Grid -->
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
+                    <!-- Mission Card -->
+                    <div class="group bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 reveal border border-pink-100/50 hover:border-pink-200/70 hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-pink-700 mb-4 group-hover:text-pink-800 transition-colors">Our Mission</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            To amplify women's voices, advocate for gender equality, and create safe spaces where every woman can thrive and reach her full potential through education, support, and empowerment.
                         </p>
                     </div>
-                    <div class="bg-pink-50 p-8 rounded-xl reveal">
-                        <h3 class="text-2xl font-semibold text-pink-600 mb-4">Our Vision</h3>
-                        <p class="text-gray-700">
-                            A world where women are empowered, respected, and have equal opportunities to lead, innovate, and make meaningful contributions to society.
+
+                    <!-- Vision Card -->
+                    <div class="group bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 reveal border border-pink-100/50 hover:border-pink-200/70 hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-pink-700 mb-4 group-hover:text-pink-800 transition-colors">Our Vision</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            A world where women are empowered, respected, and have equal opportunities to lead, innovate, and make meaningful contributions to society without fear or limitation.
                         </p>
                     </div>
-                    <div class="bg-pink-50 p-8 rounded-xl reveal">
-                        <h3 class="text-2xl font-semibold text-pink-600 mb-4">Our Goals</h3>
-                        <p class="text-gray-700">
-                            Eliminate gender-based violence, promote women's rights, support education and economic empowerment, and build stronger communities.
+
+                    <!-- Goals Card -->
+                    <div class="group bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 reveal border border-pink-100/50 hover:border-pink-200/70 hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-pink-700 mb-4 group-hover:text-pink-800 transition-colors">Our Goals</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Eliminate gender-based violence, promote women's rights, support education and economic empowerment, and build stronger, more inclusive communities together.
                         </p>
+                    </div>
+                </div>
+
+                <!-- Impact Stats -->
+                <div class="bg-gradient-to-r from-pink-600 to-pink-700 rounded-3xl p-8 md:p-12 text-white text-center reveal">
+                    <h3 class="text-3xl font-bold mb-8">Our Impact</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold mb-2">500+</div>
+                            <div class="text-pink-100">Women Supported</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold mb-2">25+</div>
+                            <div class="text-pink-100">Communities Reached</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold mb-2">15+</div>
+                            <div class="text-pink-100">Campaigns Launched</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold mb-2">100%</div>
+                            <div class="text-pink-100">Commitment</div>
+                        </div>
                     </div>
                 </div>
             </div>
