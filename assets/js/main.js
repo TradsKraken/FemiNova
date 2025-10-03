@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initScrollAnimations();
     initNavbarAnimation();
+    initDynamicCounter();
 });
 
 // Team data - edit this array to update team members
@@ -465,3 +466,155 @@ document.addEventListener('keydown', function(e) {
         closeModal();
     }
 });
+
+// Dynamic Counter for Women Impacted
+function initDynamicCounter() {
+    const counterElement = document.querySelector('[data-counter="women-impacted"]');
+    if (!counterElement) return;
+
+    // Date-based counter initialization
+    // Reference launch date (fixed) - Set to past date so counter shows meaningful numbers
+    const launchDate = new Date('2025-09-01T00:00:00'); // September 1, 2025 (past date)
+    
+    // Calculate value purely from launch date with fixed subtraction for thousands display
+    function calculateBaseValue() {
+        const now = new Date();
+        const secondsSinceLaunch = Math.max(0, (now - launchDate) / 1000);
+        // Fixed subtraction to bring into thousands range
+        const adjustedValue = Math.floor(secondsSinceLaunch) - 2000000; // Fixed subtraction of 2M
+        return Math.max(0, adjustedValue); // Ensure never negative
+    }
+
+    let currentImpacted = calculateBaseValue();
+
+    // State for expanded view
+    let isExpanded = false;
+
+    // Format number with K/M abbreviations or full numbers
+    function formatNumber(num, forceExpanded = false) {
+        if (isExpanded || forceExpanded) {
+            return num.toLocaleString(); // Full number with commas
+        }
+        
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M'; // 1.2M
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K'; // 1.2K
+        }
+        return num.toString();
+    }
+
+    // Enhanced scrolling animation with more visible effects
+    function animateCounter(from, to, duration = 1200) {
+        const start = Date.now();
+        const fromNum = typeof from === 'number' ? from : parseFloat(from.replace(/[K+,]/g, '')) * (from.includes('K+') ? 1000 : 1);
+        const toNum = typeof to === 'number' ? to : parseFloat(to.replace(/[K+,]/g, '')) * (to.includes('K+') ? 1000 : 1);
+        const parent = counterElement.closest('.bg-white\\/10');
+
+        // Add updating class for visual effects
+        parent.classList.add('counter-enhanced', 'updating');
+
+        // Create digit-by-digit animation effect with enhanced visibility
+        function createDigitAnimation(targetText) {
+            const digits = targetText.split('');
+            let animatedText = '';
+
+            digits.forEach((digit, index) => {
+                if (!isNaN(digit) || digit === ',') {
+                    animatedText += `<span class="counter-digit">${digit}</span>`;
+                } else {
+                    animatedText += digit;
+                }
+            });
+
+            return animatedText;
+        }
+
+        function update() {
+            const now = Date.now();
+            const progress = Math.min((now - start) / duration, 1);
+
+            // Enhanced easing function for more noticeable motion
+            const easeOutBack = 1 - Math.pow(1 - progress, 3) * (1 - Math.sin(progress * Math.PI * 2) * 0.1);
+            const currentNum = Math.floor(fromNum + (toNum - fromNum) * easeOutBack);
+            const displayText = formatNumber(currentNum);
+
+            // Add motion blur effect during animation
+            if (progress < 1) {
+                // Create scrolling effect with individual digit animations
+                counterElement.innerHTML = createDigitAnimation(displayText);
+
+                // Trigger digit animations with more visible delays and longer duration
+                const digitElements = counterElement.querySelectorAll('.counter-digit');
+                digitElements.forEach((digit, index) => {
+                    setTimeout(() => {
+                        digit.classList.add('scrolling');
+                        // Remove class after animation with longer duration
+                        setTimeout(() => digit.classList.remove('scrolling'), 1200);
+                    }, index * 120);
+                });
+
+                requestAnimationFrame(update);
+            } else {
+                // Final state - clean text without spans
+                counterElement.textContent = displayText;
+                parent.classList.remove('updating');
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    // Handle click to expand/collapse between abbreviated and full format
+    function handleCounterClick() {
+        const parent = counterElement.closest('.bg-white\\/10');
+        const currentValue = currentImpacted;
+
+        isExpanded = !isExpanded;
+
+        // Add enhanced click animation feedback
+        parent.classList.add('click-animate');
+        setTimeout(() => {
+            parent.classList.remove('click-animate');
+        }, 600);
+
+        // Animate between abbreviated and full format
+        if (isExpanded) {
+            // Expanding: show full number
+            animateCounter(formatNumber(currentValue, false), currentValue, 800);
+            parent.style.backgroundColor = 'rgba(255, 255, 255, 0.25)';
+        } else {
+            // Collapsing: show abbreviated format
+            animateCounter(currentValue, formatNumber(currentValue, false), 800);
+            parent.style.backgroundColor = '';
+        }
+    }
+
+    // Set initial value
+    counterElement.textContent = formatNumber(currentImpacted);
+
+    // Add click listener
+    counterElement.addEventListener('click', handleCounterClick);
+    counterElement.style.cursor = 'pointer';
+    counterElement.title = 'Click to toggle between abbreviated and full numbers';
+
+    // Update counter at random intervals (4-9 seconds) with 3 per second growth
+    function scheduleNextUpdate() {
+        // Random interval between 4-9 seconds
+        const randomDelay = 4000 + Math.random() * 5000;
+
+        setTimeout(() => {
+            const oldValue = currentImpacted;
+            // Growth of 3 per second, multiplied by actual seconds elapsed
+            const secondsElapsed = randomDelay / 1000;
+            const growthAmount = Math.floor(3 * secondsElapsed);
+            currentImpacted += growthAmount;
+
+            animateCounter(oldValue, currentImpacted, 1200);
+            scheduleNextUpdate(); // Schedule next update
+        }, randomDelay);
+    }
+
+    // Start the random updates
+    scheduleNextUpdate();
+}
