@@ -280,7 +280,29 @@ function showLoginFromSignup() {
 // Mobile menu functionality
 function toggleMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
-    mobileMenu.classList.toggle('hidden');
+    const hamburgerIcon = document.querySelector('.hamburger-icon');
+    const menuItems = document.querySelectorAll('.mobile-menu-item');
+
+    // Toggle hamburger icon animation
+    hamburgerIcon.classList.toggle('active');
+
+    // Toggle mobile menu animation
+    mobileMenu.classList.toggle('active');
+
+    // Handle menu items stagger animation
+    if (mobileMenu.classList.contains('active')) {
+        // Menu is opening - add active class to items with delay
+        menuItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('active');
+            }, index * 50);
+        });
+    } else {
+        // Menu is closing - remove active class immediately
+        menuItems.forEach(item => {
+            item.classList.remove('active');
+        });
+    }
 }
 
 // Form handlers (demo functionality)
@@ -319,13 +341,94 @@ function handleSignup(event) {
 }
 
 function handleDonation() {
-    // Demo handler
-    alert('Thank you for your interest in donating! This will redirect to our secure donation portal.');
+    showDonationModal();
 }
 
 function handleVolunteer() {
-    // Demo handler
-    alert('Thank you for your interest in volunteering! We will contact you with opportunities.');
+    showVolunteerModal();
+}
+
+// Modal functions
+function showDonationModal() {
+    const modal = document.getElementById('donationModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function showVolunteerModal() {
+    const modal = document.getElementById('volunteerModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modals = document.querySelectorAll('[id$="Modal"]');
+    modals.forEach(modal => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    });
+    document.body.style.overflow = 'auto';
+}
+
+// Donation form handlers
+function selectAmount(amount) {
+    document.getElementById('customAmount').value = amount;
+    // Remove selected class from all buttons
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.classList.remove('border-pink-600', 'bg-pink-50');
+        btn.classList.add('border-pink-200');
+    });
+    // Add selected class to clicked button
+    event.target.classList.remove('border-pink-200');
+    event.target.classList.add('border-pink-600', 'bg-pink-50');
+}
+
+function handleDonationSubmit(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('donorName').value;
+    const email = document.getElementById('donorEmail').value;
+    const phone = document.getElementById('donorPhone').value;
+    const amount = document.getElementById('customAmount').value;
+    const anonymous = document.getElementById('anonymous').checked;
+
+    if (!amount || amount <= 0) {
+        alert('Please enter a valid donation amount.');
+        return;
+    }
+
+    // Demo success message
+    const displayName = anonymous ? 'Anonymous Donor' : name;
+    alert(`Thank you ${displayName} for your generous donation of ₱${amount}! We will send a confirmation email to ${email} shortly.`);
+
+    closeModal();
+    event.target.reset();
+}
+
+// Volunteer form handler
+function handleVolunteerSubmit(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('volunteerName').value;
+    const email = document.getElementById('volunteerEmail').value;
+    const phone = document.getElementById('volunteerPhone').value;
+    const availability = document.getElementById('availability').value;
+    const message = document.getElementById('volunteerMessage').value;
+
+    const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
+
+    if (interests.length === 0) {
+        alert('Please select at least one area of interest.');
+        return;
+    }
+
+    // Demo success message
+    alert(`Thank you ${name} for your interest in volunteering! We will review your application and contact you at ${email} within 3-5 business days.`);
+
+    closeModal();
+    event.target.reset();
 }
 
 // Smooth scrolling for anchor links

@@ -21,9 +21,9 @@
 <body class="bg-pink-50 text-gray-800">
     <!-- Navigation -->
     <nav class="sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-pink-600">FemiNova</h1>
+        <div class="container mx-auto px-4 py-2 md:py-3">
+            <div class="flex justify-between items-center min-h-[48px] md:min-h-[56px]">
+                <h1 class="text-xl md:text-2xl font-bold text-pink-600">FemiNova</h1>
                 <div class="hidden md:flex space-x-6">
                     <a href="#home" class="text-gray-700 hover:text-pink-600 transition">Home</a>
                     <a href="#about" class="text-gray-700 hover:text-pink-600 transition">About</a>
@@ -32,20 +32,22 @@
                     <a href="#contact" class="text-gray-700 hover:text-pink-600 transition">Contact</a>
                     <button onclick="showLogin()" class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition">Login</button>
                 </div>
-                <button class="md:hidden text-pink-600" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
+                <button class="md:hidden text-pink-600 p-1.5 rounded-lg hover:bg-pink-50 transition-colors" onclick="toggleMobileMenu()">
+                    <div class="hamburger-icon w-5 h-5 flex flex-col justify-center items-center">
+                        <span class="hamburger-line w-5 h-0.5 bg-current block mb-0.5"></span>
+                        <span class="hamburger-line w-5 h-0.5 bg-current block mb-0.5"></span>
+                        <span class="hamburger-line w-5 h-0.5 bg-current block"></span>
+                    </div>
                 </button>
             </div>
             <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
-                <a href="#home" class="block py-2 text-gray-700 hover:text-pink-600">Home</a>
-                <a href="#about" class="block py-2 text-gray-700 hover:text-pink-600">About</a>
-                <a href="#team" class="block py-2 text-gray-700 hover:text-pink-600">Team</a>
-                <a href="campaigns.html" class="block py-2 text-gray-700 hover:text-pink-600">Campaigns</a>
-                <a href="#contact" class="block py-2 text-gray-700 hover:text-pink-600">Contact</a>
-                <button onclick="showLogin()" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition">Login</button>
+            <div id="mobileMenu" class="mobile-menu md:hidden mt-3 pb-3">
+                <a href="#home" class="mobile-menu-item block py-2.5 text-gray-700 hover:text-pink-600 transition-all border-b border-pink-100">Home</a>
+                <a href="#about" class="mobile-menu-item block py-2.5 text-gray-700 hover:text-pink-600 transition-all border-b border-pink-100">About</a>
+                <a href="#team" class="mobile-menu-item block py-2.5 text-gray-700 hover:text-pink-600 transition-all border-b border-pink-100">Team</a>
+                <a href="campaigns.html" class="mobile-menu-item block py-2.5 text-gray-700 hover:text-pink-600 transition-all border-b border-pink-100">Campaigns</a>
+                <a href="#contact" class="mobile-menu-item block py-2.5 text-gray-700 hover:text-pink-600 transition-all border-b border-pink-100">Contact</a>
+                <button onclick="showLogin()" class="mobile-menu-item mt-3 bg-pink-600 text-white px-4 py-2.5 rounded-lg hover:bg-pink-700 transition-all w-full">Login</button>
             </div>
         </div>
     </nav>
@@ -325,6 +327,120 @@
         </div>
     </div>
 
+    <!-- Donation Modal -->
+    <div id="donationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-pink-600">Make a Donation</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form onsubmit="handleDonationSubmit(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Donation Amount</label>
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <button type="button" onclick="selectAmount(25)" class="amount-btn border-2 border-pink-200 text-pink-600 py-3 px-4 rounded-lg hover:border-pink-400 transition">₱25</button>
+                        <button type="button" onclick="selectAmount(50)" class="amount-btn border-2 border-pink-200 text-pink-600 py-3 px-4 rounded-lg hover:border-pink-400 transition">₱50</button>
+                        <button type="button" onclick="selectAmount(100)" class="amount-btn border-2 border-pink-200 text-pink-600 py-3 px-4 rounded-lg hover:border-pink-400 transition">₱100</button>
+                    </div>
+                    <input type="number" id="customAmount" placeholder="Enter custom amount" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="donorName" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="donorEmail" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone (Optional)</label>
+                    <input type="tel" id="donorPhone" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="anonymous" class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                    <label for="anonymous" class="ml-2 block text-sm text-gray-700">Make this donation anonymous</label>
+                </div>
+                <button type="submit" class="w-full bg-pink-600 text-white py-3 px-6 rounded-lg hover:bg-pink-700 transition font-semibold">
+                    Complete Donation
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Volunteer Modal -->
+    <div id="volunteerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-pink-600">Join Our Volunteer Team</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form onsubmit="handleVolunteerSubmit(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="volunteerName" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="volunteerEmail" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                    <input type="tel" id="volunteerPhone" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Areas of Interest</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="interests" value="counseling" class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Counseling & Support</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="interests" value="education" class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Education & Workshops</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="interests" value="outreach" class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Community Outreach</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="interests" value="admin" class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Administrative Support</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="interests" value="fundraising" class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Fundraising</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Availability</label>
+                    <select id="availability" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        <option value="">Select availability</option>
+                        <option value="weekdays">Weekdays</option>
+                        <option value="weekends">Weekends</option>
+                        <option value="evenings">Evenings</option>
+                        <option value="flexible">Flexible</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tell us about yourself and why you want to volunteer</label>
+                    <textarea id="volunteerMessage" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Share your motivation and any relevant experience..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-pink-600 text-white py-3 px-6 rounded-lg hover:bg-pink-700 transition font-semibold">
+                    Submit Application
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-pink-800 text-white py-12">
         <div class="container mx-auto px-4">
@@ -346,8 +462,8 @@
                 </div>
                 <div>
                     <h4 class="text-xl font-semibold mb-4">Contact Info</h4>
-                    <p class="text-pink-200 mb-2">Email: info@feminova.org</p>
-                    <p class="text-pink-200">Phone: +1 (555) 123-4567</p>
+                    <p class="text-pink-200 mb-2">Email: Group_5@feminova.org</p>
+                    <p class="text-pink-200">Phone: +63 234 567 8967</p>
                 </div>
             </div>
             <div class="border-t border-pink-700 mt-8 pt-8 text-center">
