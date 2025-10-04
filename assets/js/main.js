@@ -12,19 +12,48 @@ document.addEventListener('DOMContentLoaded', function() {
     initDynamicCounter();
 });
 
+// Loading screen management
+window.addEventListener('load', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        // Minimum loading time for better UX (2 seconds)
+        const minLoadingTime = 2000;
+        const startTime = Date.now();
+
+        // Function to hide loading screen
+        const hideLoadingScreen = () => {
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+
+            setTimeout(() => {
+                // Add hide animation class
+                loadingScreen.classList.add('loading-screen-hide');
+
+                // Remove from DOM after animation completes (1.5 seconds)
+                setTimeout(() => {
+                    loadingScreen.remove();
+                }, 1500);
+            }, remainingTime);
+        };
+
+        // Start hiding process
+        hideLoadingScreen();
+    }
+});
+
 // Team data - edit this array to update team members
 const team = [
-    'AR Cagna-an|ar.cagnaan@feminova.org',
-    'Chester Ivan Mamaran|chester.mamaran@feminova.org',
-    'Christine Wasquin|christine.wasquin@feminova.org',
-    'Eljhann Abanggan|eljhann.abanggan@feminova.org',
-    'Jethro Arañez|jethro.aranez@feminova.org',
-    'Kent Dave R. Pilar|kent.pilar@feminova.org',
-    'Kurt Dave Resma|kurt.resma@feminova.org',
-    'Lurense Reloj|lurense.reloj@feminova.org',
-    'Reinna Nianga|reinna.nianga@feminova.org',
-    'Rin Marquiso|rin.marquiso@feminova.org',
-    'RJ Angelo Moniset|rj.moniset@feminova.org'
+    'Nianga, Reinna Flor P.|reinnaflorpepitonianga@gmail.com',
+    'Marquiso, Rean Alexa B.|mreanalexa@gmail.com',
+    'Abanggan, Eljann R.|eljannabanggan1@gmail.com',
+    'Arañez, Jethro T.|Akositroy17@gmail.com',
+    'Cagna-an, Aian Rey B.|aianrey577@gmail.com',
+    'Mamaran, Chester Ivan B.|navirethsehc@gmail.com',
+    'Moniset, Rj Angelo M.|rjangelomoniset1@gmail.com',
+    'Pilar, Kent Dave R.|kentdavepilar341@gmail.com',
+    'Reloj, Lurense V.|lurensereloj@gmail.com',
+    'Resma, Kurt Dave B.|resmakurt63@gmail.com',
+    'Wasquin, Christine Mae A.|christine.wasquin@feminova.org'
 ];
 
 // Affirmation of the Day functionality
@@ -57,6 +86,62 @@ async function loadAffirmation() {
         affirmationElement.textContent = `"${randomAffirmation}"`;
     }
 }
+
+// Mobile menu panel toggle (for the mobile navbar added in index.html)
+(function initMobileNavToggle() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('mobileMenuBtn');
+        const panel = document.getElementById('mobileMenuPanel');
+        const icon = document.getElementById('mobileMenuIcon');
+
+        if (!btn || !panel || !icon) return;
+
+        function openPanel() {
+            // set a max-height large enough to fit items; uses scrollHeight for smoothness
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+            panel.classList.add('open');
+            // replace hamburger with X icon
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+            btn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closePanel() {
+            panel.style.maxHeight = '0';
+            panel.classList.remove('open');
+            // restore hamburger icon
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+            btn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggle() {
+            if (panel.classList.contains('open')) closePanel(); else openPanel();
+        }
+
+        // Make closePanel globally available for onclick handlers
+        window.closeMobileMenu = closePanel;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggle();
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!panel.classList.contains('open')) return;
+            const withinPanel = panel.contains(e.target) || btn.contains(e.target);
+            if (!withinPanel) closePanel();
+        });
+
+        // Close panel when resizing to md and above
+        window.addEventListener('resize', () => {
+            try {
+                if (window.innerWidth >= 768) {
+                    closePanel();
+                }
+            } catch (e) {}
+        });
+    });
+})();
 
 // Team rendering functionality
 function renderTeam() {
@@ -128,44 +213,73 @@ function initScrollAnimations() {
 function initNavbarAnimation() {
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const nav = document.querySelector('nav');
-    if (!nav) return;
+    const desktopNav = document.querySelector('.navbar-elegant');
+    const mobileNav = document.querySelector('.mobile-nav');
 
     let lastScrollY = window.scrollY;
     let isVisible = true;
 
-    // Set initial state
-    nav.classList.add('navbar-visible');
-    nav.classList.add('navbar-initial');
+    // Set initial state for desktop nav
+    if (desktopNav) {
+        desktopNav.classList.add('navbar-visible');
+        desktopNav.classList.add('navbar-initial');
+    }
+
+    // Set initial state for mobile nav
+    if (mobileNav) {
+        mobileNav.classList.add('mobile-nav-visible');
+    }
 
     function updateNavbar() {
         const currentScrollY = window.scrollY;
         const scrollThreshold = 50;
 
-        // Handle navbar visibility (hide/show on scroll)
-        if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
-            // Scrolling down - hide navbar
-            if (isVisible) {
-                nav.classList.add('navbar-hidden');
-                nav.classList.remove('navbar-visible');
-                isVisible = false;
+        // Handle desktop navbar (only on larger screens)
+        if (desktopNav && window.innerWidth >= 768) {
+            // Handle navbar visibility (hide/show on scroll)
+            if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+                // Scrolling down - hide navbar
+                if (isVisible) {
+                    desktopNav.classList.add('navbar-hidden');
+                    desktopNav.classList.remove('navbar-visible');
+                    isVisible = false;
+                }
+            } else {
+                // Scrolling up or at top - show navbar
+                if (!isVisible) {
+                    desktopNav.classList.add('navbar-visible');
+                    desktopNav.classList.remove('navbar-hidden');
+                    isVisible = true;
+                }
             }
-        } else {
-            // Scrolling up or at top - show navbar
-            if (!isVisible) {
-                nav.classList.add('navbar-visible');
-                nav.classList.remove('navbar-hidden');
-                isVisible = true;
+
+            // Handle background opacity change
+            if (currentScrollY > scrollThreshold) {
+                desktopNav.classList.remove('navbar-initial');
+                desktopNav.classList.add('navbar-scrolled');
+            } else {
+                desktopNav.classList.remove('navbar-scrolled');
+                desktopNav.classList.add('navbar-initial');
             }
         }
 
-        // Handle background opacity change
-        if (currentScrollY > scrollThreshold) {
-            nav.classList.remove('navbar-initial');
-            nav.classList.add('navbar-scrolled');
-        } else {
-            nav.classList.remove('navbar-scrolled');
-            nav.classList.add('navbar-initial');
+        // Handle mobile navbar (only on small screens)
+        if (mobileNav && window.innerWidth < 768) {
+            if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+                // Scrolling down - hide navbar
+                if (isVisible) {
+                    mobileNav.classList.add('mobile-nav-hidden');
+                    mobileNav.classList.remove('mobile-nav-visible');
+                    isVisible = false;
+                }
+            } else {
+                // Scrolling up or at top - show navbar
+                if (!isVisible) {
+                    mobileNav.classList.add('mobile-nav-visible');
+                    mobileNav.classList.remove('mobile-nav-hidden');
+                    isVisible = true;
+                }
+            }
         }
 
         lastScrollY = currentScrollY;
@@ -181,6 +295,21 @@ function initNavbarAnimation() {
             });
             ticking = true;
         }
+    });
+
+    // Handle window resize to switch between desktop and mobile behavior
+    window.addEventListener('resize', function() {
+        // Reset visibility state on resize
+        isVisible = true;
+        if (desktopNav) {
+            desktopNav.classList.remove('navbar-hidden', 'navbar-scrolled');
+            desktopNav.classList.add('navbar-visible', 'navbar-initial');
+        }
+        if (mobileNav) {
+            mobileNav.classList.remove('mobile-nav-hidden');
+            mobileNav.classList.add('mobile-nav-visible');
+        }
+        updateNavbar(); // Update immediately on resize
     });
 
     // Initial call
@@ -366,6 +495,13 @@ function showVolunteerModal() {
     document.body.style.overflow = 'hidden';
 }
 
+function showHelpConfirmationModal() {
+    const modal = document.getElementById('helpConfirmationModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
 function closeModal() {
     const modals = document.querySelectorAll('[id$="Modal"]');
     modals.forEach(modal => {
@@ -432,6 +568,42 @@ function handleVolunteerSubmit(event) {
 
     closeModal();
     event.target.reset();
+}
+
+// Help/Emergency form handler
+function handleHelpSubmit(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('helpName').value;
+    const phone = document.getElementById('helpPhone').value;
+    const address = document.getElementById('helpAddress').value;
+    const situation = document.getElementById('helpSituation').value;
+
+    // Validate required fields
+    if (!name.trim() || !phone.trim() || !address.trim() || !situation.trim()) {
+        alert('Please fill in all required fields. Your safety is our priority.');
+        return;
+    }
+
+    // Emergency contact information
+    const emergencyMessage = `
+EMERGENCY ASSISTANCE REQUEST
+Name: ${name}
+Phone: ${phone}
+Address: ${address}
+Situation: ${situation}
+
+This is an urgent request for help. Please respond immediately.
+Time: ${new Date().toLocaleString()}
+    `.trim();
+
+    // In a real implementation, this would send to emergency services
+    // For demo purposes, show confirmation modal
+    console.log('Emergency Alert:', emergencyMessage); // Log for debugging
+
+    // Reset form and show confirmation modal
+    event.target.reset();
+    showHelpConfirmationModal();
 }
 
 // Smooth scrolling for anchor links
